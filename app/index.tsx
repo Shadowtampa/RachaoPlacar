@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { StyleSheet, useWindowDimensions, View } from 'react-native'
 
 import { ResetButton } from '../components/ResetButton'
@@ -7,6 +7,7 @@ import { SettingsButton } from '../components/SettingsButton'
 import { SettingsModal } from '../components/SettingsModal'
 import { TimerToggle } from '../components/TimerToggle'
 import { useCountdown } from '../hooks/useCountdown'
+import { useSound } from '../hooks/useSound'
 import type { AppState } from '../types'
 
 const TIMER_TEST = process.env.EXPO_PUBLIC_TIMER_TEST === 'true'
@@ -33,8 +34,17 @@ export default function ScoreScreen() {
   const [hasStarted, setHasStarted] = useState(false)
   const { width, height } = useWindowDimensions()
   const orientation = width > height ? 'landscape' : 'portrait'
+  const playSound = useSound()
+  const previousRemainingTime = useRef(state.game.remainingTime)
 
   useCountdown(state.game.running, setState)
+
+  useEffect(() => {
+    if (previousRemainingTime.current !== 0 && state.game.remainingTime === 0) {
+      playSound(3)
+    }
+    previousRemainingTime.current = state.game.remainingTime
+  }, [state.game.remainingTime, playSound])
 
   const saveSettings = (
     targetScore: number,
@@ -61,6 +71,7 @@ export default function ScoreScreen() {
   }
 
   const toggleTimer = () => {
+    if (!state.game.running && state.game.remainingTime > 0) playSound(1)
     setState((prev) => {
       if (!prev.game.running && prev.game.remainingTime <= 0) return prev
       return { ...prev, game: { ...prev.game, running: !prev.game.running } }
@@ -69,6 +80,9 @@ export default function ScoreScreen() {
   }
 
   const incrementScore = (team: 'teamA' | 'teamB') => {
+    const newScore = state[team].score + 1
+    const justReachedTarget = !state.game.scoreReleased && newScore >= state.game.targetScore
+    if (justReachedTarget) playSound(3)
     setState((prev) => {
       const newScore = prev[team].score + 1
       const justReachedTarget = !prev.game.scoreReleased && newScore >= prev.game.targetScore
