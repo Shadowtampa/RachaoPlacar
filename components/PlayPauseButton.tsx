@@ -1,29 +1,27 @@
 import { Pressable, StyleSheet, Text } from 'react-native'
 
-type ScoreButtonProps = {
-  label: string
+type PlayPauseButtonProps = {
+  running: boolean
   onPress: () => void
   disabled?: boolean
 }
 
-export function ScoreButton({ label, onPress, disabled }: ScoreButtonProps) {
+export function PlayPauseButton({ running, onPress, disabled }: PlayPauseButtonProps) {
   return (
     <Pressable
       style={[styles.button, disabled && styles.disabled]}
       onPress={onPress}
       disabled={disabled}
     >
-      <Text style={styles.label}>{label}</Text>
+      <Text style={styles.label}>{running ? 'Pause' : 'Play'}</Text>
     </Pressable>
   )
 }
 
 const styles = StyleSheet.create({
   button: {
-    width: 72,
-    height: 72,
-    alignItems: 'center',
-    justifyContent: 'center',
+    paddingVertical: 12,
+    paddingHorizontal: 32,
     borderRadius: 8,
     borderWidth: 1,
     borderColor: '#ccc',
@@ -32,7 +30,7 @@ const styles = StyleSheet.create({
     opacity: 0.4,
   },
   label: {
-    fontSize: 24,
+    fontSize: 18,
     fontWeight: '600',
   },
 })

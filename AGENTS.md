@@ -204,7 +204,7 @@ Quando chegar em zero:
 
 Nesta primeira versão:
 
-Caso algum dos times atinja a pontuação objetivo, deve ser inserido um emoji de coroa abaixo do span do nome do time vencedor. 
+Caso algum dos times atinja a pontuação objetivo, deve ser inserido um emoji de coroa ACIMA do span do nome do time vencedor. 
 
 ## Persistência
 

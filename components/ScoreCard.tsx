@@ -7,16 +7,17 @@ type ScoreCardProps = {
   score: number
   onIncrement: () => void
   onDecrement: () => void
+  disabled?: boolean
 }
 
-export function ScoreCard({ name, score, onIncrement, onDecrement }: ScoreCardProps) {
+export function ScoreCard({ name, score, onIncrement, onDecrement, disabled }: ScoreCardProps) {
   return (
     <View style={styles.card}>
       <Text style={styles.name}>{name}</Text>
       <Text style={styles.score}>{score}</Text>
       <View style={styles.buttons}>
-        <ScoreButton label="-1" onPress={onDecrement} />
-        <ScoreButton label="+1" onPress={onIncrement} />
+        <ScoreButton label="-1" onPress={onDecrement} disabled={disabled} />
+        <ScoreButton label="+1" onPress={onIncrement} disabled={disabled} />
       </View>
     </View>
   )

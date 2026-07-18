@@ -1,7 +1,10 @@
 import { useState } from 'react'
 import { Pressable, StyleSheet, Text, View } from 'react-native'
 
+import { PlayPauseButton } from '../components/PlayPauseButton'
 import { ScoreCard } from '../components/ScoreCard'
+import { Timer } from '../components/Timer'
+import { useCountdown } from '../hooks/useCountdown'
 import type { AppState } from '../types'
 
 const initialState: AppState = {
@@ -17,6 +20,15 @@ const initialState: AppState = {
 
 export default function ScoreScreen() {
   const [state, setState] = useState<AppState>(initialState)
+
+  useCountdown(state.game.running, setState)
+
+  const toggleTimer = () => {
+    setState((prev) => {
+      if (!prev.game.running && prev.game.remainingTime <= 0) return prev
+      return { ...prev, game: { ...prev.game, running: !prev.game.running } }
+    })
+  }
 
   const incrementScore = (team: 'teamA' | 'teamB') => {
     setState((prev) => ({
@@ -37,28 +49,42 @@ export default function ScoreScreen() {
       ...prev,
       teamA: { ...prev.teamA, score: 0 },
       teamB: { ...prev.teamB, score: 0 },
+      game: {
+        ...prev.game,
+        remainingTime: prev.game.durationInMinutes * 60,
+        running: false,
+      },
     }))
   }
 
   return (
     <View style={styles.container}>
-      <ScoreCard
-        name={state.teamA.name}
-        score={state.teamA.score}
-        onIncrement={() => incrementScore('teamA')}
-        onDecrement={() => decrementScore('teamA')}
-      />
+      <View style={styles.scoreboard}>
+        <ScoreCard
+          name={state.teamA.name}
+          score={state.teamA.score}
+          onIncrement={() => incrementScore('teamA')}
+          onDecrement={() => decrementScore('teamA')}
+          disabled={!state.game.running}
+        />
 
-      <Pressable style={styles.resetButton} onPress={resetScores}>
-        <Text style={styles.resetLabel}>Reset</Text>
-      </Pressable>
+        <Pressable style={styles.resetButton} onPress={resetScores}>
+          <Text style={styles.resetLabel}>Reset</Text>
+        </Pressable>
 
-      <ScoreCard
-        name={state.teamB.name}
-        score={state.teamB.score}
-        onIncrement={() => incrementScore('teamB')}
-        onDecrement={() => decrementScore('teamB')}
-      />
+        <ScoreCard
+          name={state.teamB.name}
+          score={state.teamB.score}
+          onIncrement={() => incrementScore('teamB')}
+          onDecrement={() => decrementScore('teamB')}
+          disabled={!state.game.running}
+        />
+      </View>
+
+      <View style={styles.timerSection}>
+        <Timer remainingTime={state.game.remainingTime} />
+        <PlayPauseButton running={state.game.running} onPress={toggleTimer} />
+      </View>
     </View>
   )
 }
@@ -66,10 +92,19 @@ export default function ScoreScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#fff',
+  },
+  scoreboard: {
+    flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-evenly',
-    backgroundColor: '#fff',
+  },
+  timerSection: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 12,
+    paddingBottom: 32,
   },
   resetButton: {
     paddingVertical: 8,
