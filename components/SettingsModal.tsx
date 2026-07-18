@@ -2,6 +2,7 @@ import { useState } from 'react'
 import {
   Keyboard,
   KeyboardAvoidingView,
+  Linking,
   Modal,
   Platform,
   Pressable,
@@ -12,6 +13,9 @@ import {
   TouchableWithoutFeedback,
   View,
 } from 'react-native'
+
+const LINKEDIN_URL = 'https://www.linkedin.com/in/lugom/'
+const INSTAGRAM_URL = 'https://www.instagram.com/luis_the_dev/'
 
 type SettingsModalProps = {
   visible: boolean
@@ -141,6 +145,24 @@ export function SettingsModal({
                 <Pressable style={styles.saveButton} onPress={handleSave}>
                   <Text style={styles.saveLabel}>Salvar</Text>
                 </Pressable>
+
+                <View style={styles.socialsSection}>
+                  <Text style={styles.label}>Redes sociais</Text>
+                  <View style={styles.socialsRow}>
+                    <Pressable
+                      style={styles.socialButton}
+                      onPress={() => Linking.openURL(LINKEDIN_URL)}
+                    >
+                      <Text style={styles.socialLabel}>LinkedIn</Text>
+                    </Pressable>
+                    <Pressable
+                      style={styles.socialButton}
+                      onPress={() => Linking.openURL(INSTAGRAM_URL)}
+                    >
+                      <Text style={styles.socialLabel}>Instagram</Text>
+                    </Pressable>
+                  </View>
+                </View>
               </View>
             </TouchableWithoutFeedback>
           </View>
@@ -204,6 +226,27 @@ const styles = StyleSheet.create({
   saveLabel: {
     color: '#fff',
     fontSize: 18,
+    fontWeight: '600',
+  },
+  socialsSection: {
+    gap: 8,
+    marginTop: 6,
+  },
+  socialsRow: {
+    flexDirection: 'row',
+    gap: 10,
+  },
+  socialButton: {
+    flex: 1,
+    borderWidth: 1,
+    borderColor: 'rgba(0,0,0,0.2)',
+    borderRadius: 10,
+    paddingVertical: 12,
+    alignItems: 'center',
+  },
+  socialLabel: {
+    fontSize: 15,
+    color: '#111',
     fontWeight: '600',
   },
 })
