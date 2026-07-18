@@ -8,6 +8,7 @@ export type Game = {
   durationInMinutes: number
   remainingTime: number
   running: boolean
+  scoreLocked: boolean
 }
 
 export type AppState = {
