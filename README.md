@@ -1,6 +1,6 @@
 # Rachao Placar
 
-App mobile pra controlar placar e cronômetro de partidas de basquete 3x3. React Native + Expo, offline, sem backend.
+Solução web pra controlar placar e cronômetro de partidas de basquete 3x3. React Native + Expo (web), offline, sem backend.
 
 ## Preview
 
