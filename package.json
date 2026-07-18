@@ -1,6 +1,6 @@
 {
   "name": "rachaplacar",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "main": "expo-router/entry",
   "dependencies": {
     "expo": "^54.0.36",
