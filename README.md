@@ -4,7 +4,7 @@ App mobile pra controlar placar e cronômetro de partidas de basquete 3x3. React
 
 ## Preview
 
-![Placar](assets/docs/screenshot.png)
+![Placar](assets/docs/capa.png)
 
 ## Stack
 
