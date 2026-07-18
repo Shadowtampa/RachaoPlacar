@@ -5,7 +5,8 @@ type ScoreHalfProps = {
   score: number
   onIncrement: () => void
   onDecrement: () => void
-  disabled?: boolean
+  incrementDisabled?: boolean
+  decrementDisabled?: boolean
   isWinner?: boolean
   variant: 'dark' | 'light'
   decrementOffset: number
@@ -16,7 +17,8 @@ export function ScoreHalf({
   score,
   onIncrement,
   onDecrement,
-  disabled,
+  incrementDisabled,
+  decrementDisabled,
   isWinner,
   variant,
   decrementOffset,
@@ -27,7 +29,7 @@ export function ScoreHalf({
     <Pressable
       style={[styles.half, isDark ? styles.dark : styles.light]}
       onPress={onIncrement}
-      disabled={disabled}
+      disabled={incrementDisabled}
     >
       <Text style={styles.crown}>{isWinner ? '👑' : ' '}</Text>
       <Text style={[styles.name, isDark ? styles.nameDark : styles.nameLight]}>{name}</Text>
@@ -43,7 +45,7 @@ export function ScoreHalf({
           event.stopPropagation()
           onDecrement()
         }}
-        disabled={disabled}
+        disabled={decrementDisabled}
       >
         <Text style={[styles.decrementLabel, isDark ? styles.decrementLabelDark : styles.decrementLabelLight]}>
           −

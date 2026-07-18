@@ -16,7 +16,7 @@ import {
 type SettingsModalProps = {
   visible: boolean
   targetScore: number
-  scoreLocked: boolean
+  scoreReleased: boolean
   durationInMinutes: number
   teamAName: string
   teamBName: string
@@ -24,7 +24,7 @@ type SettingsModalProps = {
   teamBWonLastRound: boolean
   onSave: (
     targetScore: number,
-    scoreLocked: boolean,
+    scoreReleased: boolean,
     durationInMinutes: number,
     teamAName: string,
     teamBName: string,
@@ -35,7 +35,7 @@ type SettingsModalProps = {
 export function SettingsModal({
   visible,
   targetScore,
-  scoreLocked,
+  scoreReleased,
   durationInMinutes,
   teamAName,
   teamBName,
@@ -45,7 +45,7 @@ export function SettingsModal({
   onClose,
 }: SettingsModalProps) {
   const [targetScoreInput, setTargetScoreInput] = useState(String(targetScore))
-  const [scoreLockedInput, setScoreLockedInput] = useState(scoreLocked)
+  const [scoreReleasedInput, setScoreReleasedInput] = useState(scoreReleased)
   const [durationInput, setDurationInput] = useState(String(durationInMinutes))
   const [teamANameInput, setTeamANameInput] = useState(teamAName)
   const [teamBNameInput, setTeamBNameInput] = useState(teamBName)
@@ -55,7 +55,7 @@ export function SettingsModal({
     const parsedDuration = parseInt(durationInput, 10)
     onSave(
       Number.isNaN(parsedScore) || parsedScore <= 0 ? targetScore : parsedScore,
-      scoreLockedInput,
+      scoreReleasedInput,
       Number.isNaN(parsedDuration) || parsedDuration <= 0 ? durationInMinutes : parsedDuration,
       teamANameInput.trim() === '' ? teamAName : teamANameInput,
       teamBNameInput.trim() === '' ? teamBName : teamBNameInput,
@@ -116,10 +116,10 @@ export function SettingsModal({
                 </View>
 
                 <View style={styles.lockRow}>
-                  <Text style={styles.label}>Bloquear pontuação</Text>
+                  <Text style={styles.label}>Liberar pontuação</Text>
                   <Switch
-                    value={scoreLockedInput}
-                    onValueChange={setScoreLockedInput}
+                    value={scoreReleasedInput}
+                    onValueChange={setScoreReleasedInput}
                     trackColor={{ false: 'rgba(0,0,0,0.15)', true: '#111' }}
                     thumbColor="#fff"
                   />

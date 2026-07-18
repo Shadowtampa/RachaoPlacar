@@ -23,7 +23,7 @@ const initialState: AppState = {
     durationInMinutes: 7,
     remainingTime: resolveRemainingTime(7),
     running: false,
-    scoreLocked: false,
+    scoreReleased: false,
   },
 }
 
@@ -36,7 +36,7 @@ export default function ScoreScreen() {
 
   const saveSettings = (
     targetScore: number,
-    scoreLocked: boolean,
+    scoreReleased: boolean,
     durationInMinutes: number,
     teamAName: string,
     teamBName: string,
@@ -48,7 +48,7 @@ export default function ScoreScreen() {
       game: {
         ...prev.game,
         targetScore,
-        scoreLocked,
+        scoreReleased,
         durationInMinutes,
         remainingTime: resolveRemainingTime(durationInMinutes),
         running: false,
@@ -67,10 +67,15 @@ export default function ScoreScreen() {
   }
 
   const incrementScore = (team: 'teamA' | 'teamB') => {
-    setState((prev) => ({
-      ...prev,
-      [team]: { ...prev[team], score: prev[team].score + 1 },
-    }))
+    setState((prev) => {
+      const newScore = prev[team].score + 1
+      const justReachedTarget = !prev.game.scoreReleased && newScore >= prev.game.targetScore
+      return {
+        ...prev,
+        [team]: { ...prev[team], score: newScore },
+        game: justReachedTarget ? { ...prev.game, running: false } : prev.game,
+      }
+    })
   }
 
   const decrementScore = (team: 'teamA' | 'teamB') => {
@@ -102,7 +107,10 @@ export default function ScoreScreen() {
     }))
   }
 
-  const scoringDisabled = !hasStarted || state.game.scoreLocked
+  const targetReached =
+    state.teamA.score >= state.game.targetScore || state.teamB.score >= state.game.targetScore
+  const decrementDisabled = !hasStarted
+  const incrementDisabled = !hasStarted || (targetReached && !state.game.scoreReleased)
 
   return (
     <View style={styles.container}>
@@ -111,7 +119,8 @@ export default function ScoreScreen() {
         score={state.teamA.score}
         onIncrement={() => incrementScore('teamA')}
         onDecrement={() => decrementScore('teamA')}
-        disabled={scoringDisabled}
+        incrementDisabled={incrementDisabled}
+        decrementDisabled={decrementDisabled}
         isWinner={teamAWins}
         variant="dark"
         decrementOffset={18}
@@ -132,7 +141,8 @@ export default function ScoreScreen() {
         score={state.teamB.score}
         onIncrement={() => incrementScore('teamB')}
         onDecrement={() => decrementScore('teamB')}
-        disabled={scoringDisabled}
+        incrementDisabled={incrementDisabled}
+        decrementDisabled={decrementDisabled}
         isWinner={teamBWins}
         variant="light"
         decrementOffset={44}
@@ -141,7 +151,7 @@ export default function ScoreScreen() {
       <SettingsModal
         visible={settingsVisible}
         targetScore={state.game.targetScore}
-        scoreLocked={state.game.scoreLocked}
+        scoreReleased={state.game.scoreReleased}
         durationInMinutes={state.game.durationInMinutes}
         teamAName={state.teamA.name}
         teamBName={state.teamB.name}
