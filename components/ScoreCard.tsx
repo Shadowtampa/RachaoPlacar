@@ -8,11 +8,13 @@ type ScoreCardProps = {
   onIncrement: () => void
   onDecrement: () => void
   disabled?: boolean
+  isWinner?: boolean
 }
 
-export function ScoreCard({ name, score, onIncrement, onDecrement, disabled }: ScoreCardProps) {
+export function ScoreCard({ name, score, onIncrement, onDecrement, disabled, isWinner }: ScoreCardProps) {
   return (
     <View style={styles.card}>
+      <Text style={styles.crown}>{isWinner ? '👑' : ' '}</Text>
       <Text style={styles.name}>{name}</Text>
       <Text style={styles.score}>{score}</Text>
       <View style={styles.buttons}>
@@ -27,6 +29,9 @@ const styles = StyleSheet.create({
   card: {
     alignItems: 'center',
     gap: 8,
+  },
+  crown: {
+    fontSize: 20,
   },
   name: {
     fontSize: 18,

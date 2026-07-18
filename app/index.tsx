@@ -8,10 +8,10 @@ import { useCountdown } from '../hooks/useCountdown'
 import type { AppState } from '../types'
 
 const initialState: AppState = {
-  teamA: { name: 'Time A', score: 0 },
-  teamB: { name: 'Time B', score: 0 },
+  teamA: { name: 'Com Camisa', score: 0 },
+  teamB: { name: 'Sem Camisa', score: 0 },
   game: {
-    targetScore: 21,
+    targetScore: 12,
     durationInMinutes: 7,
     remainingTime: 7 * 60,
     running: false,
@@ -66,6 +66,7 @@ export default function ScoreScreen() {
           onIncrement={() => incrementScore('teamA')}
           onDecrement={() => decrementScore('teamA')}
           disabled={!state.game.running}
+          isWinner={state.teamA.score >= state.game.targetScore}
         />
 
         <Pressable style={styles.resetButton} onPress={resetScores}>
@@ -78,6 +79,7 @@ export default function ScoreScreen() {
           onIncrement={() => incrementScore('teamB')}
           onDecrement={() => decrementScore('teamB')}
           disabled={!state.game.running}
+          isWinner={state.teamB.score >= state.game.targetScore}
         />
       </View>
 
