@@ -1,11 +1,11 @@
 import { useState } from 'react'
-import { Pressable, StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, View } from 'react-native'
 
-import { PlayPauseButton } from '../components/PlayPauseButton'
-import { ScoreCard } from '../components/ScoreCard'
+import { ResetButton } from '../components/ResetButton'
+import { ScoreHalf } from '../components/ScoreHalf'
 import { SettingsButton } from '../components/SettingsButton'
 import { SettingsModal } from '../components/SettingsModal'
-import { Timer } from '../components/Timer'
+import { TimerToggle } from '../components/TimerToggle'
 import { useCountdown } from '../hooks/useCountdown'
 import type { AppState } from '../types'
 
@@ -102,39 +102,41 @@ export default function ScoreScreen() {
     }))
   }
 
+  const scoringDisabled = !hasStarted || state.game.scoreLocked
+
   return (
     <View style={styles.container}>
-      <View style={styles.scoreboard}>
-        <ScoreCard
-          name={state.teamA.name}
-          score={state.teamA.score}
-          onIncrement={() => incrementScore('teamA')}
-          onDecrement={() => decrementScore('teamA')}
-          disabled={!hasStarted || state.game.scoreLocked}
-          isWinner={teamAWins}
-        />
+      <ScoreHalf
+        name={state.teamA.name}
+        score={state.teamA.score}
+        onIncrement={() => incrementScore('teamA')}
+        onDecrement={() => decrementScore('teamA')}
+        disabled={scoringDisabled}
+        isWinner={teamAWins}
+        variant="dark"
+        decrementOffset={18}
+      />
 
-        <View style={styles.centerColumn}>
-          <SettingsButton onPress={() => setSettingsVisible(true)} />
-          <Pressable style={styles.resetButton} onPress={resetScores}>
-            <Text style={styles.resetLabel}>Reset</Text>
-          </Pressable>
-        </View>
-
-        <ScoreCard
-          name={state.teamB.name}
-          score={state.teamB.score}
-          onIncrement={() => incrementScore('teamB')}
-          onDecrement={() => decrementScore('teamB')}
-          disabled={!hasStarted || state.game.scoreLocked}
-          isWinner={teamBWins}
+      <View style={styles.bar}>
+        <SettingsButton onPress={() => setSettingsVisible(true)} />
+        <TimerToggle
+          remainingTime={state.game.remainingTime}
+          running={state.game.running}
+          onPress={toggleTimer}
         />
+        <ResetButton onPress={resetScores} />
       </View>
 
-      <View style={styles.timerSection}>
-        <Timer remainingTime={state.game.remainingTime} />
-        <PlayPauseButton running={state.game.running} onPress={toggleTimer} />
-      </View>
+      <ScoreHalf
+        name={state.teamB.name}
+        score={state.teamB.score}
+        onIncrement={() => incrementScore('teamB')}
+        onDecrement={() => decrementScore('teamB')}
+        disabled={scoringDisabled}
+        isWinner={teamBWins}
+        variant="light"
+        decrementOffset={44}
+      />
 
       <SettingsModal
         visible={settingsVisible}
@@ -155,33 +157,16 @@ export default function ScoreScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
   },
-  scoreboard: {
-    flex: 1,
+  bar: {
+    height: 86,
+    backgroundColor: '#ececec',
+    borderTopWidth: 1,
+    borderBottomWidth: 1,
+    borderColor: 'rgba(0,0,0,0.1)',
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-evenly',
-  },
-  timerSection: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: 12,
-    paddingBottom: 32,
-  },
-  centerColumn: {
-    alignItems: 'center',
-    gap: 16,
-  },
-  resetButton: {
-    paddingVertical: 8,
-    paddingHorizontal: 16,
-    borderRadius: 8,
-    borderWidth: 1,
-    borderColor: '#ccc',
-  },
-  resetLabel: {
-    fontSize: 16,
-    fontWeight: '600',
+    justifyContent: 'space-between',
+    paddingHorizontal: 26,
   },
 })

@@ -74,7 +74,7 @@ export function SettingsModal({
               <View style={styles.sheet}>
                 <Text style={styles.title}>Configurações</Text>
 
-                <View style={styles.section}>
+                <View style={styles.field}>
                   <Text style={styles.label}>
                     Nome do Time A{teamAWonLastRound ? ' 👑' : ''}
                   </Text>
@@ -86,7 +86,9 @@ export function SettingsModal({
                     returnKeyType="done"
                     onSubmitEditing={Keyboard.dismiss}
                   />
+                </View>
 
+                <View style={styles.field}>
                   <Text style={styles.label}>
                     Nome do Time B{teamBWonLastRound ? ' 👑' : ''}
                   </Text>
@@ -100,7 +102,7 @@ export function SettingsModal({
                   />
                 </View>
 
-                <View style={styles.section}>
+                <View style={styles.field}>
                   <Text style={styles.label}>Pontuação objetivo</Text>
                   <TextInput
                     style={styles.input}
@@ -111,14 +113,19 @@ export function SettingsModal({
                     returnKeyType="done"
                     onSubmitEditing={Keyboard.dismiss}
                   />
-
-                  <View style={styles.lockRow}>
-                    <Text style={styles.label}>Bloquear pontuação</Text>
-                    <Switch value={scoreLockedInput} onValueChange={setScoreLockedInput} />
-                  </View>
                 </View>
 
-                <View style={styles.section}>
+                <View style={styles.lockRow}>
+                  <Text style={styles.label}>Bloquear pontuação</Text>
+                  <Switch
+                    value={scoreLockedInput}
+                    onValueChange={setScoreLockedInput}
+                    trackColor={{ false: 'rgba(0,0,0,0.15)', true: '#111' }}
+                    thumbColor="#fff"
+                  />
+                </View>
+
+                <View style={styles.field}>
                   <Text style={styles.label}>Tempo da partida (minutos)</Text>
                   <TextInput
                     style={styles.input}
@@ -150,32 +157,37 @@ const styles = StyleSheet.create({
   overlayFill: {
     flex: 1,
     justifyContent: 'flex-end',
-    backgroundColor: 'rgba(0,0,0,0.4)',
+    backgroundColor: 'rgba(0,0,0,0.45)',
   },
   sheet: {
     backgroundColor: '#fff',
-    borderTopLeftRadius: 16,
-    borderTopRightRadius: 16,
-    padding: 24,
-    gap: 24,
+    borderTopLeftRadius: 28,
+    borderTopRightRadius: 28,
+    paddingTop: 28,
+    paddingHorizontal: 24,
+    paddingBottom: 40,
+    gap: 14,
   },
   title: {
-    fontSize: 20,
-    fontWeight: '600',
+    fontSize: 26,
+    fontWeight: '800',
+    color: '#111',
+    marginBottom: 4,
   },
-  section: {
-    gap: 12,
+  field: {
+    gap: 6,
   },
   label: {
-    fontSize: 16,
+    fontSize: 15,
+    color: '#111',
   },
   input: {
     borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 8,
-    paddingVertical: 10,
-    paddingHorizontal: 12,
-    fontSize: 18,
+    borderColor: 'rgba(0,0,0,0.2)',
+    borderRadius: 10,
+    paddingVertical: 12,
+    paddingHorizontal: 14,
+    fontSize: 17,
   },
   lockRow: {
     flexDirection: 'row',
@@ -184,13 +196,14 @@ const styles = StyleSheet.create({
   },
   saveButton: {
     backgroundColor: '#111',
-    borderRadius: 8,
-    paddingVertical: 14,
+    borderRadius: 14,
+    paddingVertical: 15,
     alignItems: 'center',
+    marginTop: 6,
   },
   saveLabel: {
     color: '#fff',
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: '600',
   },
 })
