@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { StyleSheet, View } from 'react-native'
+import { StyleSheet, useWindowDimensions, View } from 'react-native'
 
 import { ResetButton } from '../components/ResetButton'
 import { ScoreHalf } from '../components/ScoreHalf'
@@ -31,6 +31,8 @@ export default function ScoreScreen() {
   const [state, setState] = useState<AppState>(initialState)
   const [settingsVisible, setSettingsVisible] = useState(false)
   const [hasStarted, setHasStarted] = useState(false)
+  const { width, height } = useWindowDimensions()
+  const orientation = width > height ? 'landscape' : 'portrait'
 
   useCountdown(state.game.running, setState)
 
@@ -112,8 +114,10 @@ export default function ScoreScreen() {
   const decrementDisabled = !hasStarted
   const incrementDisabled = !hasStarted || (targetReached && !state.game.scoreReleased)
 
+  const isLandscape = orientation === 'landscape'
+
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, isLandscape && styles.containerLandscape]}>
       <ScoreHalf
         name={state.teamA.name}
         score={state.teamA.score}
@@ -123,15 +127,17 @@ export default function ScoreScreen() {
         decrementDisabled={decrementDisabled}
         isWinner={teamAWins}
         variant="dark"
-        decrementOffset={18}
+        orientation={orientation}
+        decrementPosition={isLandscape ? { left: 26, bottom: 22 } : { right: 22, bottom: 18 }}
       />
 
-      <View style={styles.bar}>
+      <View style={[styles.bar, isLandscape && styles.barLandscape]}>
         <SettingsButton onPress={() => setSettingsVisible(true)} />
         <TimerToggle
           remainingTime={state.game.remainingTime}
           running={state.game.running}
           onPress={toggleTimer}
+          orientation={orientation}
         />
         <ResetButton onPress={resetScores} />
       </View>
@@ -145,7 +151,8 @@ export default function ScoreScreen() {
         decrementDisabled={decrementDisabled}
         isWinner={teamBWins}
         variant="light"
-        decrementOffset={44}
+        orientation={orientation}
+        decrementPosition={isLandscape ? { right: 26, bottom: 22 } : { right: 22, bottom: 44 }}
       />
 
       <SettingsModal
@@ -168,6 +175,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
+  containerLandscape: {
+    flexDirection: 'row',
+  },
   bar: {
     height: 86,
     backgroundColor: '#ececec',
@@ -178,5 +188,18 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: 26,
+  },
+  barLandscape: {
+    height: 'auto',
+    width: 118,
+    borderTopWidth: 0,
+    borderBottomWidth: 0,
+    borderLeftWidth: 1,
+    borderRightWidth: 1,
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 0,
+    paddingVertical: 24,
   },
 })

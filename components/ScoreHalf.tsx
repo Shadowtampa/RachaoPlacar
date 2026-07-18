@@ -1,5 +1,11 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native'
 
+type DecrementPosition = {
+  bottom: number
+  left?: number
+  right?: number
+}
+
 type ScoreHalfProps = {
   name: string
   score: number
@@ -9,7 +15,8 @@ type ScoreHalfProps = {
   decrementDisabled?: boolean
   isWinner?: boolean
   variant: 'dark' | 'light'
-  decrementOffset: number
+  orientation: 'portrait' | 'landscape'
+  decrementPosition: DecrementPosition
 }
 
 export function ScoreHalf({
@@ -21,9 +28,11 @@ export function ScoreHalf({
   decrementDisabled,
   isWinner,
   variant,
-  decrementOffset,
+  orientation,
+  decrementPosition,
 }: ScoreHalfProps) {
   const isDark = variant === 'dark'
+  const isLandscape = orientation === 'landscape'
 
   return (
     <Pressable
@@ -33,13 +42,24 @@ export function ScoreHalf({
     >
       <Text style={styles.crown}>{isWinner ? '👑' : ' '}</Text>
       <Text style={[styles.name, isDark ? styles.nameDark : styles.nameLight]}>{name}</Text>
-      <Text style={[styles.score, isDark ? styles.scoreDark : styles.scoreLight]}>{score}</Text>
+      <Text
+        style={[
+          styles.score,
+          isLandscape && styles.scoreLandscape,
+          isDark ? styles.scoreDark : styles.scoreLight,
+        ]}
+        numberOfLines={1}
+        adjustsFontSizeToFit
+        minimumFontScale={0.4}
+      >
+        {score}
+      </Text>
 
       <Pressable
         style={[
           styles.decrementButton,
           isDark ? styles.decrementButtonDark : styles.decrementButtonLight,
-          { bottom: decrementOffset },
+          decrementPosition,
         ]}
         onPress={(event) => {
           event.stopPropagation()
@@ -71,7 +91,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
   },
   name: {
-    fontSize: 14,
+    fontSize: 15,
     fontWeight: '600',
     letterSpacing: 3,
     textTransform: 'uppercase',
@@ -83,9 +103,13 @@ const styles = StyleSheet.create({
     color: 'rgba(17,17,17,0.5)',
   },
   score: {
-    fontSize: 96,
+    fontSize: 170,
     fontWeight: '800',
+    letterSpacing: -6,
     fontVariant: ['tabular-nums'],
+  },
+  scoreLandscape: {
+    fontSize: 150,
   },
   scoreDark: {
     color: '#fff',
@@ -95,7 +119,6 @@ const styles = StyleSheet.create({
   },
   decrementButton: {
     position: 'absolute',
-    right: 22,
     width: 44,
     height: 44,
     borderRadius: 999,

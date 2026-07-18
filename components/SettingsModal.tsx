@@ -14,8 +14,11 @@ import {
   View,
 } from 'react-native'
 
+import packageJson from '../package.json'
+
 const LINKEDIN_URL = 'https://www.linkedin.com/in/lugom/'
 const INSTAGRAM_URL = 'https://www.instagram.com/luis_the_dev/'
+const APP_VERSION = packageJson.version
 
 type SettingsModalProps = {
   visible: boolean
@@ -76,7 +79,10 @@ export function SettingsModal({
           <View style={styles.overlayFill}>
             <TouchableWithoutFeedback>
               <View style={styles.sheet}>
-                <Text style={styles.title}>Configurações</Text>
+                <View style={styles.titleRow}>
+                  <Text style={styles.title}>Configurações</Text>
+                  <Text style={styles.version}>v{APP_VERSION}</Text>
+                </View>
 
                 <View style={styles.field}>
                   <Text style={styles.label}>
@@ -190,11 +196,21 @@ const styles = StyleSheet.create({
     paddingBottom: 40,
     gap: 14,
   },
+  titleRow: {
+    flexDirection: 'row',
+    alignItems: 'baseline',
+    gap: 8,
+    marginBottom: 4,
+  },
   title: {
     fontSize: 26,
     fontWeight: '800',
     color: '#111',
-    marginBottom: 4,
+  },
+  version: {
+    fontSize: 13,
+    fontWeight: '600',
+    color: 'rgba(0,0,0,0.4)',
   },
   field: {
     gap: 6,
