@@ -30,6 +30,7 @@ const initialState: AppState = {
 export default function ScoreScreen() {
   const [state, setState] = useState<AppState>(initialState)
   const [settingsVisible, setSettingsVisible] = useState(false)
+  const [hasStarted, setHasStarted] = useState(false)
 
   useCountdown(state.game.running, setState)
 
@@ -53,6 +54,7 @@ export default function ScoreScreen() {
         running: false,
       },
     }))
+    setHasStarted(false)
     setSettingsVisible(false)
   }
 
@@ -61,6 +63,7 @@ export default function ScoreScreen() {
       if (!prev.game.running && prev.game.remainingTime <= 0) return prev
       return { ...prev, game: { ...prev.game, running: !prev.game.running } }
     })
+    if (state.game.remainingTime > 0) setHasStarted(true)
   }
 
   const incrementScore = (team: 'teamA' | 'teamB') => {
@@ -86,6 +89,7 @@ export default function ScoreScreen() {
     (timeUp && state.teamB.score > state.teamA.score)
 
   const resetScores = () => {
+    setHasStarted(false)
     setState((prev) => ({
       ...prev,
       teamA: { ...prev.teamA, score: 0 },
@@ -106,7 +110,7 @@ export default function ScoreScreen() {
           score={state.teamA.score}
           onIncrement={() => incrementScore('teamA')}
           onDecrement={() => decrementScore('teamA')}
-          disabled={!state.game.running || state.game.scoreLocked}
+          disabled={!hasStarted || state.game.scoreLocked}
           isWinner={teamAWins}
         />
 
@@ -122,7 +126,7 @@ export default function ScoreScreen() {
           score={state.teamB.score}
           onIncrement={() => incrementScore('teamB')}
           onDecrement={() => decrementScore('teamB')}
-          disabled={!state.game.running || state.game.scoreLocked}
+          disabled={!hasStarted || state.game.scoreLocked}
           isWinner={teamBWins}
         />
       </View>
