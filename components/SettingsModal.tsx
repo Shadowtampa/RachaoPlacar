@@ -6,6 +6,7 @@ import {
   Modal,
   Platform,
   Pressable,
+  ScrollView,
   StyleSheet,
   Switch,
   Text,
@@ -105,6 +106,11 @@ export function SettingsModal({
           <View style={styles.overlayFill}>
             <TouchableWithoutFeedback>
               <View style={styles.sheet}>
+              <ScrollView
+                contentContainerStyle={styles.sheetContent}
+                keyboardShouldPersistTaps="handled"
+                showsVerticalScrollIndicator={false}
+              >
                 <View style={styles.titleRow}>
                   <Text style={styles.title}>Configurações</Text>
                   <Text style={styles.version}>v{APP_VERSION}</Text>
@@ -201,6 +207,7 @@ export function SettingsModal({
                     </Pressable>
                   </View>
                 </View>
+              </ScrollView>
               </View>
             </TouchableWithoutFeedback>
           </View>
@@ -223,6 +230,9 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     borderTopLeftRadius: 28,
     borderTopRightRadius: 28,
+    maxHeight: '85%',
+  },
+  sheetContent: {
     paddingTop: 28,
     paddingHorizontal: 24,
     paddingBottom: 40,
