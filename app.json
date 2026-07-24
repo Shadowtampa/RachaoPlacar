@@ -20,7 +20,11 @@
       "predictiveBackGestureEnabled": false
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/favicon.png",
+      "name": "RachaPlacar",
+      "themeColor": "#E6F4FE",
+      "backgroundColor": "#E6F4FE",
+      "output": "static"
     },
     "plugins": [
       "expo-router",
