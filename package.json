@@ -1,8 +1,9 @@
 {
   "name": "rachaplacar",
-  "version": "0.7.1",
+  "version": "0.7.2",
   "main": "expo-router/entry",
   "dependencies": {
+    "@vercel/analytics": "^2.0.1",
     "expo": "^54.0.36",
     "expo-audio": "~1.1.1",
     "expo-constants": "~18.0.13",
