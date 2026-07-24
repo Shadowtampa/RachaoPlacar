@@ -25,6 +25,16 @@ O projeto será desenvolvido priorizando simplicidade, legibilidade e evolução
 - Sem banco de dados
 - Estado somente em memória
 
+## PWA
+
+App também roda como PWA (web output estático via `expo export -p web`).
+
+- `app.json` → `expo.web.output: "static"`
+- `app/+html.tsx` → shell HTML customizado (Expo Router), injeta `<link rel="manifest">`, meta tags de tema/apple e registra o service worker
+- `public/manifest.json` → manifest da PWA (nome, ícones 192/512, `display: standalone`)
+- `public/sw.js` → service worker
+- `public/icons/` → ícones do manifest
+
 ## Filosofia
 
 - Mobile First

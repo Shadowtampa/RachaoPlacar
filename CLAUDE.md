@@ -6,6 +6,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 Expo TypeScript scaffold in place (`create-expo-app` blank-typescript) with Expo Router. NativeWind was tried and abandoned — its Babel plugin (`react-native-css-interop`) hard-requires `react-native-worklets/plugin`, and Metro's transform worker couldn't resolve it even with the package installed. Styling uses plain React Native `StyleSheet.create` instead.
 
+App now also ships as a PWA: `app/+html.tsx` custom root shell + `public/manifest.json` + `public/sw.js` + `public/icons/`. Web build uses `expo.web.output: "static"` in `app.json`.
+
 ## Source of truth
 
 Full product spec lives in [AGENTS.md](AGENTS.md) — read it before doing any work here. It covers:
@@ -24,3 +26,4 @@ When AGENTS.md and this file conflict, AGENTS.md wins — update this file inste
 
 - `npx expo start` — run the dev server
 - `npx tsc --noEmit` — typecheck
+- `npx expo export -p web` — build static PWA output
