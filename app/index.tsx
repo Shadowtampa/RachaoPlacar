@@ -53,20 +53,25 @@ export default function ScoreScreen() {
     teamAName: string,
     teamBName: string,
   ) => {
-    setState((prev) => ({
-      ...prev,
-      teamA: { ...prev.teamA, name: teamAName },
-      teamB: { ...prev.teamB, name: teamBName },
-      game: {
-        ...prev.game,
-        targetScore,
-        scoreReleased,
-        durationInMinutes,
-        remainingTime: resolveRemainingTime(durationInMinutes),
-        running: false,
-      },
-    }))
-    setHasStarted(false)
+    setState((prev) => {
+      const durationChanged = durationInMinutes !== prev.game.durationInMinutes
+      return {
+        ...prev,
+        teamA: { ...prev.teamA, name: teamAName },
+        teamB: { ...prev.teamB, name: teamBName },
+        game: {
+          ...prev.game,
+          targetScore,
+          scoreReleased,
+          durationInMinutes,
+          remainingTime: durationChanged
+            ? resolveRemainingTime(durationInMinutes)
+            : prev.game.remainingTime,
+          running: durationChanged ? false : prev.game.running,
+        },
+      }
+    })
+    if (durationInMinutes !== state.game.durationInMinutes) setHasStarted(false)
     setSettingsVisible(false)
   }
 
